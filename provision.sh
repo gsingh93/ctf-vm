@@ -33,6 +33,9 @@ install_binjitsu() {
 }
 
 install_pwndbg() {
+    # We echo this here because otherwise `setup.sh` will echo the wrong
+    # path
+    echo "# source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
     git clone https://github.com/zachriggle/pwndbg
     cd pwndbg
     ./setup.sh
@@ -41,7 +44,7 @@ install_pwndbg() {
 install_peda() {
     git clone https://github.com/longld/peda.git
     if ! grep peda ~/.gdbinit &>/dev/null; then
-        echo "# source $HOMEDIR/tools/peda/peda.py" >> ~/.gdbinit
+        echo "source $HOMEDIR/tools/peda/peda.py" >> ~/.gdbinit
     fi
 }
 
