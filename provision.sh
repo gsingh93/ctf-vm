@@ -28,7 +28,7 @@ install_rp() {
 }
 
 install_binjitsu() {
-    package python2.7 python2.7-dev python-pip libssl-dev
+    package python2.7 python2.7-dev python-pip libssl-dev libffi-dev
     sudo -H pip install --upgrade git+https://github.com/binjitsu/binjitsu.git
 }
 
@@ -59,7 +59,7 @@ install_angr() {
 }
 
 install_afl() {
-    package clang llvm
+    package clang llvm libtool autoconf bison
     wget -q http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz
     tar -xf afl-latest.tgz
     rm afl-latest.tgz
@@ -95,7 +95,7 @@ install_xrop() {
 }
 
 install_qemu() {
-    $(dirname $1)/setup_qemu_arm.sh
+    /vagrant/setup_qemu_arm.sh
 }
 
 init() {
