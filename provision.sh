@@ -119,6 +119,7 @@ init() {
     sudo dpkg --add-architecture i386
     sudo apt-get update
     package libc6:i386 libncurses5:i386 libstdc++6:i386
+    package libc6-dbg libc6-dbg:i386
     package libc6-dev-i386
 }
 
