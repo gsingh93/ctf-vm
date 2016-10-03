@@ -57,7 +57,7 @@ install_pwndbg() {
     if ! grep pwndbg ~/.gdbinit &>/dev/null; then
         echo "# source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
     fi
-    git_clone https://github.com/zachriggle/pwndbg pwndbg
+    git_clone https://github.com/pwndbg/pwndbg.git pwndbg
     cd pwndbg
     ./setup.sh
 }
