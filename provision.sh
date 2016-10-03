@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Bash strict mode
+set -euo pipefail
+
+# Verbose
+#set -x
+
 HOMEDIR=/home/vagrant
 
 log() {
@@ -8,6 +14,19 @@ log() {
 
 package() {
     sudo apt-get -y install "$@"
+}
+
+git_clone() {
+    # Clone git repo into directory, clearing directory if it exists
+    # Usage: git_clone URL DIR [GIT_CLONE OPTIONS...]
+
+    local url="$1"
+    shift
+    local dir="$1"
+    shift
+
+    sudo rm -rf "$dir"
+    git clone "$@" "$url" "$dir"
 }
 
 install_() {
@@ -27,22 +46,24 @@ install_rp() {
     rm rp-lin-x64
 }
 
-install_binjitsu() {
+install_pwntools() {
     package python2.7 python2.7-dev python-pip libssl-dev libffi-dev
-    sudo -H pip install --upgrade git+https://github.com/binjitsu/binjitsu.git
+    sudo -H pip install --upgrade pwntools
 }
 
 install_pwndbg() {
     # We echo this here because otherwise `setup.sh` will echo the wrong
     # path
-    echo "# source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
-    git clone https://github.com/zachriggle/pwndbg
+    if ! grep pwndbg ~/.gdbinit &>/dev/null; then
+        echo "# source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
+    fi
+    git_clone https://github.com/zachriggle/pwndbg pwndbg
     cd pwndbg
     ./setup.sh
 }
 
 install_peda() {
-    git clone https://github.com/longld/peda.git
+    git_clone https://github.com/longld/peda.git peda
     if ! grep peda ~/.gdbinit &>/dev/null; then
         echo "source $HOMEDIR/tools/peda/peda.py" >> ~/.gdbinit
     fi
@@ -68,7 +89,7 @@ install_afl() {
     rm afl-latest.tgz
     (
         cd afl-*
-        make
+        make -j$(nproc)
         (
             cd qemu_mode
             ./build_qemu_support.sh
@@ -78,21 +99,23 @@ install_afl() {
 }
 
 install_ropgadget() {
-    git clone https://github.com/JonathanSalwan/ROPgadget
+    git_clone https://github.com/JonathanSalwan/ROPgadget ROPgadget
     cd ROPgadget
     sudo python setup.py install
 }
 
 install_libheap() {
-    git clone https://github.com/cloudburst/libheap
+    git_clone https://github.com/cloudburst/libheap libheap
     sudo cp libheap/libheap.py /usr/lib/python3.4
     echo "# python from libheap import *" >> ~/.gdbinit
 }
 
 install_xrop() {
-    git clone --depth 1 https://github.com/acama/xrop.git
+    git_clone https://github.com/acama/xrop.git xrop --depth 1
     cd xrop
     git submodule update --init --recursive
+
+    # xrop does not support parallel build
     make
     sudo install -s xrop /usr/bin/xrop
 }
@@ -102,25 +125,33 @@ install_qemu() {
 }
 
 init() {
+    # Add 32-bit arch to dpkg
+    sudo dpkg --add-architecture i386
+
     # Updates
     sudo apt-get -y update
     sudo apt-get -y upgrade
 
-    package emacs
-    package git
-    package python3-pip
-    package tmux
-    package gdb gdb-multiarch
-    package unzip
-    package foremost
-    package ipython
+    # Install packages
+    package \
+        build-essential \
+        emacs vim \
+        git \
+        python-pip python3-pip \
+        python2.7 python2.7-dev libssl-dev libffi-dev \
+        tmux \
+        gdb gdb-multiarch \
+        unzip \
+        foremost \
+        ipython ipython3
 
     # Install 32 bit libs
-    sudo dpkg --add-architecture i386
-    sudo apt-get update
-    package libc6:i386 libncurses5:i386 libstdc++6:i386
-    package libc6-dbg libc6-dbg:i386
-    package libc6-dev-i386
+    package libc6:i386 libncurses5:i386 libstdc++6:i386 \
+        libc6-dbg libc6-dbg:i386 \
+        libc6-dev-i386
+
+    # Fix urllib3 InsecurePlatformWarning
+    sudo -H pip install --upgrade urllib3[secure]
 }
 
 # Only install if script is being executed, not sourced
@@ -130,11 +161,11 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     init
 
     cd $HOMEDIR
-    mkdir tools
+    mkdir -p tools
 
     install_ pwndbg true
     install_ peda false
-    install_ binjitsu
+    install_ pwntools
     install_ pin
     install_ afl
     #install_ libheap true
