@@ -146,7 +146,8 @@ init() {
         ipython ipython3
 
     # Install 32 bit libs
-    package libc6:i386 libncurses5:i386 libstdc++6:i386 \
+    package \
+        libc6:i386 libncurses5:i386 libstdc++6:i386 \
         libc6-dbg libc6-dbg:i386 \
         libc6-dev-i386
 
