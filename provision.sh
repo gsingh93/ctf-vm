@@ -6,7 +6,7 @@ set -euo pipefail
 # Verbose
 #set -x
 
-HOMEDIR=/home/vagrant
+HOMEDIR=~
 
 log() {
     echo -e "\033[32m[+] $1\033[0m"
@@ -150,6 +150,13 @@ init() {
         libc6:i386 libncurses5:i386 libstdc++6:i386 \
         libc6-dbg libc6-dbg:i386 \
         libc6-dev-i386
+
+    # Fix warning when loading .gdbinit files
+    echo 'set auto-load safe-path /' > ~/.gdbinit
+
+    # Enable ptracing
+    sudo sed -i 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/g' /etc/sysctl.d/10-ptrace.conf
+    sudo sysctl --system
 
     # Fix urllib3 InsecurePlatformWarning
     sudo -H pip install --upgrade urllib3[secure]
