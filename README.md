@@ -1,6 +1,6 @@
 # CTF VM
 
-An Ubuntu 14.04 x64 VM for binary exploitation CTF problems.
+An Ubuntu 14.04 x64 VM for binary exploitation and reversing CTF problems. For a 16.04 VM, checkout the `ubuntu16.04` branch.
 
 ## Installation
 
@@ -16,7 +16,7 @@ Included packages
 
 - pwndbg
 - peda
-- binjitsu (pwntools)
+- pwntools
 - Pin
 - AFL
 - ROPgadget
