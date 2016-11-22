@@ -55,7 +55,7 @@ install_pwndbg() {
     # We echo this here because otherwise `setup.sh` will echo the wrong
     # path
     if ! grep pwndbg ~/.gdbinit &>/dev/null; then
-        echo "# source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
+        echo "source $HOMEDIR/tools/pwndbg/gdbinit.py" >> ~/.gdbinit
     fi
     git_clone https://github.com/pwndbg/pwndbg.git pwndbg
     cd pwndbg
@@ -65,7 +65,7 @@ install_pwndbg() {
 install_peda() {
     git_clone https://github.com/longld/peda.git peda
     if ! grep peda ~/.gdbinit &>/dev/null; then
-        echo "source $HOMEDIR/tools/peda/peda.py" >> ~/.gdbinit
+        echo "# source $HOMEDIR/tools/peda/peda.py" >> ~/.gdbinit
     fi
 }
 
@@ -102,12 +102,6 @@ install_ropgadget() {
     git_clone https://github.com/JonathanSalwan/ROPgadget ROPgadget
     cd ROPgadget
     sudo python setup.py install
-}
-
-install_libheap() {
-    git_clone https://github.com/cloudburst/libheap libheap
-    sudo cp libheap/libheap.py /usr/lib/python3.4
-    echo "# python from libheap import *" >> ~/.gdbinit
 }
 
 install_xrop() {
@@ -171,12 +165,11 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     cd $HOMEDIR
     mkdir -p tools
 
-    install_ pwndbg true
-    install_ peda false
+    install_ pwndbg
+    install_ peda
     install_ pwntools
     install_ pin
     install_ afl
-    #install_ libheap true
 
     # Multiple ROP gadget finders
     install_ ropgadget
