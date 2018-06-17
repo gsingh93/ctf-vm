@@ -1,8 +1,8 @@
 #!/bin/bash
 
-URL=http://wiki.qemu-project.org/download/
+URL=https://download.qemu.org/
 
-latest_qemu=$(curl --silent $URL | grep -oP "\bqemu-[0-9.]+\.tar\.bz2\b" | sort | uniq | tail -n 1)
+latest_qemu=$(curl --silent $URL | grep -oP "\bqemu-[0-9.]+\.tar\.bz2\b" | sort -V | uniq | tail -n1)
 
 basename=$(basename $latest_qemu .tar.bz2)
 if [[ ! -d $basename ]]; then
