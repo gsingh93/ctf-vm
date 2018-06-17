@@ -83,7 +83,7 @@ install_angr() {
 }
 
 install_afl() {
-    package clang llvm libtool-bin autoconf bison
+    package clang llvm libtool-bin autoconf bison flex
     wget -q http://lcamtuf.coredump.cx/afl/releases/afl-latest.tgz
     tar -xf afl-latest.tgz
     rm afl-latest.tgz
