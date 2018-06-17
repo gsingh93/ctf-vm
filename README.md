@@ -1,6 +1,6 @@
 # CTF VM
 
-An Ubuntu 14.04 x64 VM for binary exploitation and reversing CTF problems. For a 16.04 VM, checkout the `ubuntu16.04` branch.
+An Ubuntu 16.04 x64 VM for binary exploitation and reversing CTF problems. For a 14.04 VM, checkout the `ubuntu14.04` branch. For a Windows 7 CTF VM, see https://github.com/gsingh93/ctf-vm-windows7.
 
 ## Installation
 
