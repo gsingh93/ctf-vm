@@ -111,7 +111,7 @@ install_xrop() {
 
     # xrop does not support parallel build
     make
-    sudo install -s xrop /usr/bin/xrop
+    sudo make install
 }
 
 install_qemu() {
