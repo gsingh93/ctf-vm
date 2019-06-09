@@ -114,6 +114,11 @@ install_xrop() {
     sudo make install
 }
 
+install_one_gadget() {
+    package ruby
+    sudo gem install one_gadget
+}
+
 install_qemu() {
     /vagrant/setup_qemu_arm.sh
 }
@@ -175,6 +180,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     install_ ropgadget
     install_ rp
     install_ xrop
+
+    install_ one_gadget
 
     install_ qemu
     install_ angr
