@@ -123,6 +123,10 @@ install_qemu() {
     /vagrant/setup_qemu_arm.sh
 }
 
+install_frida() {
+    sudo -H pip install frida-tools frida --upgrade
+}
+
 init() {
     # Add 32-bit arch to dpkg
     sudo dpkg --add-architecture i386
@@ -195,4 +199,5 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 
     install_ qemu
     install_ angr
+    install_ frida
 fi
