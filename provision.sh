@@ -150,8 +150,18 @@ init() {
         libc6-dbg libc6-dbg:i386 \
         libc6-dev-i386
 
+    # Install glibc source
+    package glibc-source
+    cd /usr/src/glibc
+    sudo tar -xf *.xz
+
     # Fix warning when loading .gdbinit files
     echo 'set auto-load safe-path /' > ~/.gdbinit
+
+    # Add each glibc source dir to the GDB search path
+    for p in $(find /usr/src/glibc/glibc* -type d); do
+        echo "dir $p" >> ~/.gdbinit
+    done
 
     # Enable ptracing
     sudo sed -i 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 0/g' /etc/sysctl.d/10-ptrace.conf
