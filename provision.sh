@@ -188,7 +188,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     install_ peda
     install_ pwntools
     install_ pin
-    install_ afl
+    #install_ afl
 
     # Multiple ROP gadget finders
     install_ ropgadget
