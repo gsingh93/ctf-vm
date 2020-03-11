@@ -105,6 +105,7 @@ install_ropgadget() {
 }
 
 install_xrop() {
+    package texinfo
     git_clone https://github.com/acama/xrop.git xrop --depth 1
     cd xrop
     git submodule update --init --recursive
